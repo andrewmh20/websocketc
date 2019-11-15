@@ -26,6 +26,7 @@
     "space-before-blocks": 2,
     "space-infix-ops": 2,
     "strict": 0
+
   },
   "extends": [
     "eslint:recommended",

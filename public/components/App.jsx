@@ -3,11 +3,13 @@ import WSContainer from './WSContainer';
 
 class App extends React.Component {
 
+  //TODO this is an extra layer of abstraction we can probably remove
+  
+  
   render() {
-    console.log('Hello From JSX');
     return (
-      <div><h2>Hello From React</h2>
-        <WSContainer />
+      <div>
+        <WSContainer/>
       </div>
     )
   }
