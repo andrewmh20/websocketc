@@ -33,7 +33,7 @@ bower_components
 build/Release
 
 # Dependency directories
-node_modules/
+modules/
 jspm_packages/
 
 # TypeScript v1 declaration files
@@ -60,5 +60,6 @@ typings/
 # next.js build output
 .next
 
-#Built files
-/public/build
+#Custom files
+/public/js/bundle.js
+.vscode
