@@ -63,3 +63,4 @@ typings/
 #Custom files
 /public/js/bundle.js
 .vscode
+.DS_Store
