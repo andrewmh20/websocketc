@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from 'react'
 import { animateScroll } from 'react-scroll';
 import Form from 'react-bootstrap/Form'

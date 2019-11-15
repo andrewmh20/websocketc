@@ -8,12 +8,12 @@ import ejs from 'ejs';
 const server = express();
 
 // Use the EJS rendering engine for HTML located in /views
-server.set('views', __dirname + '/../views')
+server.set('views', __dirname + '/../../public/views')
 server.engine('html', ejs.__express)
 server.set('view engine', 'html')
 
 // Host static files on URL path
-server.use(express.static(path.join(__dirname, '../public')))
+server.use(express.static(path.join(__dirname, '../../public/')))
 
 
 server.use(express.urlencoded({ extended: true }));

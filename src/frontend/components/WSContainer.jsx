@@ -104,6 +104,8 @@ class WSContainer extends React.Component {
   
   //TODO: Fix hitting enter to click add button
   handleAdd(title, url) {
+
+    //TODO: Deal with adding duplicates
     if (title && url) {
       //Todo better validation
       console.log(title)

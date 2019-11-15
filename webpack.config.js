@@ -1,7 +1,7 @@
 const path = require('path')
 
 module.exports = {
-  entry: './public/index.jsx',
+  entry: './src/frontend/index.jsx',
   module: {
     rules: [
       {
@@ -15,7 +15,7 @@ module.exports = {
     extensions: ['*', '.js', '.jsx'],
   },
   output: {
-    path: path.resolve(__dirname, './public/build'),
+    path: path.resolve(__dirname, './public/js'),
     filename: 'bundle.js',
   },
   mode: 'development',
