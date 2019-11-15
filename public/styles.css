@@ -1,0 +1,9 @@
+.terminal{
+    white-space: pre-wrap;
+    overflow: scroll;
+     height: 100%;
+      width: 100%;
+      background: black;
+      opacity: .2;
+      color: white;
+}
