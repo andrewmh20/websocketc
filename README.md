@@ -16,8 +16,15 @@ Website to provide easy interface between users and their own servers running we
 * Full functionality is better in last milestone, this is work in progress for data persistence and users
 
 ## Milestone 3
-* Finalize auth/database
+* Finalize auth/database -- Auth and database now works as was expected for Milestone 2
 * UI Prettiness (move login routing to client)
 * Better Error handling
+* Refactor code better
 * Save past received messages
 * Clean up routes to look nicer
+
+
+## To run locally:
+* npm run watch 
+* In a new terminal, npm run start
+* Navigate to websocketc.com (currently redirects to localhost:3000 on the DNS side)

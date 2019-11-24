@@ -61,7 +61,7 @@ class Api {
 
   }
 
-  static async addWSHost(user, userData) {
+  static async updateWSHosts(user, userData) {
     let err = null;
     let updatedUser = null;
     try {
@@ -79,13 +79,8 @@ class Api {
         resolve({user: updatedUser.givenName, wsData: updatedUser.wsData})
       }
     })
-
-
-    
-    
   }
 
-  //TODO
 
 }
 export default Api;

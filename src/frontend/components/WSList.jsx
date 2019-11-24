@@ -14,6 +14,7 @@ class WSList extends React.Component {
     
   }
 
+  //TODO: DECIDE how to order lists
   render() {
     const wsData = this.props.wsData;
     // console.log(this.props);
@@ -48,6 +49,7 @@ class WSList extends React.Component {
 
         </Table>
 
+
         {/* TODO: Change all this UI etc. and form handling to be better*/}
         <Form>
           <Form.Group controlId="formBasicEmail">
@@ -63,7 +65,7 @@ class WSList extends React.Component {
     Add
           </Button>
         </Form>
-
+        <Button href='/auth/logout'>Logout</Button>
       </div>
     )
   }

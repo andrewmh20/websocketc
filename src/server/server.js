@@ -48,12 +48,14 @@ let userData = [];
 //   wsData: [{name: 'Test', url: 'ws://localhost:8080'}, {name: 'Test', url: 'localhost'}]}])
 
 
-const sess = {
-  secret: 'thirty street',
-  cookie: {}
-}
+// const sess = {
+//   secret: 'thirty street',
+//   cookie: {}
+// }
 
-server.use(expressSession(sess));    
+server.use(expressSession({ secret: 'TEST', maxAge:null })); //session secret
+
+// server.use(expressSession(sess));    
 
 
 server.use(passport.initialize());
@@ -92,6 +94,16 @@ server.get('/auth/google/login',
   }
   ));
 
+server.get('/auth/login', (req,res)=>{
+  res.redirect('/auth/google/login');
+
+});
+
+server.get('/auth/logout', function(req, res) {
+  req.logout();
+  res.redirect('/');
+});
+
 
 //Handle errors
 server.get('/auth/google/callback', 
@@ -113,11 +125,12 @@ server.get('/auth/google/callback',
 
 //Then define models for database...
 
-server.get('/', (_, res) => {
-  res.render('index');
+server.get('/', (req, res) => {
+  res.render('App')
 })
 
-server.get('/App', (_, res) => {
+server.get('/App', (req, res) => {
+  console.log(req.user);
   res.render('App');
 })
 
@@ -138,8 +151,14 @@ server.get('/App', (_, res) => {
 server.get('/api/getUserData', async (req, res) => {
   // console.log(req.user);
   try {
-    const userData = await Api.getUserData(req.user);
-    res.send(userData);
+    if (!req.user) {
+      res.send({user:null});
+    } else {
+      const userData = await Api.getUserData(req.user);
+      res.send(userData);
+  
+
+    }
 
   } catch (err) {
     res.redirect('/');
@@ -149,10 +168,10 @@ server.get('/api/getUserData', async (req, res) => {
 
 //TODO refresh of page shouldnt give errors
 
-server.post('/api/addWSHost', async (req, res) => {
+server.post('/api/updateWSHosts', async (req, res) => {
 //TODO: auth
   try {
-    const userData = await Api.addWSHost(req.user, req.body);
+    const userData = await Api.updateWSHosts(req.user, req.body);
     res.send(userData);
 
   } catch (err) {
@@ -164,13 +183,17 @@ server.post('/api/addWSHost', async (req, res) => {
 })
 
 //TODO: Refactor this so I dont rely on names of object on host
-server.post('/api/removeWSHost', (req,res) =>{
-  // userData['req.user'].wsData.splice('')
-  //TODO adjust this to remove for a specific user
-  userData[0] = req.body;
-  console.log(req.body);
-  console.log(userData[0]);
-  res.send(userData[0]);
+// server.post('/api/removeWSHost', (req,res) =>{
+//   // userData['req.user'].wsData.splice('')
+//   //TODO adjust this to remove for a specific user
+//   userData[0] = req.body;
+//   console.log(req.body);
+//   console.log(userData[0]);
+//   res.send(userData[0]);
+// })
+
+server.get('/getUser', (req,res)=>{
+  res.send(req.user);
 })
 
 

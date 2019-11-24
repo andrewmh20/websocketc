@@ -10,8 +10,8 @@ class WSContainer extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state =
-     {user: null, wsData: [], activeWS: null, error: null}
+    this.state = this.props.initState;
+    //{user: null, wsData: [], activeWS: null, error: null}
     // console.log(this.state);
 
     this.handleConnect = this.handleConnect.bind(this);
@@ -23,17 +23,6 @@ class WSContainer extends React.Component {
 
   }
 
-  componentDidMount() {
-    axios.get('/api/getUserData').then(res => {
-      console.log(res.data);
-      // this.setState({user: res.data.user, wsData: res.data.wsData});
-      this.setState(res.data);
-    }, 
-    err => {
-      console.log('AXIOS ERROR' + err);
-    }
-    )
-  }
 
 
   render() {
@@ -54,7 +43,7 @@ class WSContainer extends React.Component {
           </Alert>
           <WSHeader user={this.state.user} />
           <WSList
-         wsData ={this.state.wsData} handleConnect = {this.handleConnect}
+            wsData ={this.state.wsData} handleConnect = {this.handleConnect}
             handleDelete = {this.handleDelete} 
             handleAdd = {this.handleAdd}/>
         </div>
@@ -66,7 +55,7 @@ class WSContainer extends React.Component {
         <div>
           <WSHeader user={this.state.user} />
           <WSList
-         wsData ={this.state.wsData} handleConnect = {this.handleConnect}
+            wsData ={this.state.wsData} handleConnect = {this.handleConnect}
             handleDelete = {this.handleDelete} 
             handleAdd = {this.handleAdd}/>
           
@@ -90,8 +79,10 @@ class WSContainer extends React.Component {
     const tempArr = this.state.wsData;
     tempArr.splice(WSItemIndex, 1);
 
+
+    //TODO Refactor this out to one function
     // console.log({user: this.state.user, wsData: this.state.wsData.splice(WSItemIndex, 1)});
-    axios.post('/api/removeWSHost', {user: this.state.user, wsData: tempArr})
+    axios.post('/api/updateWSHosts', {user: this.state.user, wsData: tempArr})
       .then(res =>{
         console.log(res);
         this.setState(res.data);
@@ -116,7 +107,7 @@ class WSContainer extends React.Component {
       const tempArr = this.state.wsData; 
       console.log(tempArr);
       tempArr.push({name: title, url: url});
-      axios.post('/api/addWSHost', {user: this.state.user, wsData: tempArr})
+      axios.post('/api/updateWSHosts', {user: this.state.user, wsData: tempArr})
         .then(res=>{
           this.setState(res.data);
           console.log('Added')
