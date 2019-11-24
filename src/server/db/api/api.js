@@ -3,93 +3,89 @@ import User from './../models/user'
 class Api {
 
 
-  static getOrCreateUser(id, name, done) {
+  static async getOrCreateUser(id, name) {
 
-    // User.findOrCreate({ googleId: id }, (err, user, created) => {
-    //   console.log('Created');
-    //   // return (done(err,user))
-    //   done(err,user);
-    //   User.findOrCreate({}, (err, user, created) => {
-    //     console.log('Did not create');
-    //     // return (err,user);
-    //     done(err,user);
-    //   })
-    // });
 
-    User.findOneAndUpdate(
-      {googleId: id}, 
-      {googleId: id}, 
-      {upsert: true, new: true, runValidators: true}, // options
-      (err, user) => { // callback
-        if (err) {
-          return done(err,null);     
-        } else {
-          console.log('added' + user);
-          return done(null,user)         
-        }
-      }
-  
-    )
-  }
+    // let returnVal = {err: null, user: null};
+    // TODO: this is not ideal as it doesnt allow for the name changing on googles end. But okay for now.
+    // HJust want to elet google handle the passwords basically.
     
-  //   });)
+    let user = null;
+    let error = null;
+    try {
+      user = await User.findOne({ googleId: id });
 
-  //TODO: this is not ideal as it doesnt allow for the name changing on googles end. But okay for now.
-  //HJust want to elet google handle the passwords basically.
-  //   User.findOne({ googleId: id }, (err, user) => {
-  //   //console.log(err);
-  //   //console.log(user);
-  //     if (err) {
-  //       return done(err)
-  //     }
-  //     if (!err && !user) {
-  //       const user = new User({ googleId: id, givenName: name})
-  //       console.log("Making User")
+    } catch (err) {
+      error = err;
+    }
 
-  //       user.save(done);
-  //       return done(null, false);
-  //     }
-  //     if (!err && user) {
-  //       console.log("User exists")
-  //       return done(null, user);
-  //     }
-  //   });
+    if (user == null) {
+      // console.log('Making User')
+      try {      
+        //TODO Whats this about? How to fix it
+        user = await User.create({ googleId: id, givenName: name});
+      } catch (err) {
+        error = err;
+      }
+    }
+    return new Promise((res,rej)=>{
+      if (error == null) {
+        res(user);
+      } else {
+        console.log(error);
+        rej(error);
+      }
+
+    })
   
-
-  static getUserData(user,cb) {
-    if (!user) {
-      cb(new Error('User not logged in'), null)
-    } else {
-      User.findOne({ googleId: user.googleId }, (err, user) => {
-      // console.log('here' + user);
-        cb(err,{user: user.givenName, wsData: user.wsData});
-      });
-    }
   }
 
-  static addWSHost(user, userData, cb) {
+  static async getUserData(user) {
+    let error = null;
+    let userObj = null;
 
-    if (!user) {
-      cb(new Error('User not logged in'), null)
-    } else {
-
-      User.findOne({ googleId: user.googleId }, (err, user) => {
-      // console.log('here' + user);
-        user = new User({googleId: user.googleId, givenName: user.givenName, wsData: userData.wsData})
-        user.save( (err)=>{
-          if (err) {
-            cb(err,null);
-          }
-        });
-        if (err) {
-          cb(err,null);
-        } else {
-          cb(null, userData);
-        }
-      });
-
+    try {
+      userObj = await User.findOne({ googleId: user.googleId })
+  
+    } catch (err) {
+      error = err;
     }
+    return new Promise((res,rej)=>{
+      if (!error) {
+        res({user: userObj.givenName, wsData: userObj.wsData})
+      } else {
+        rej(error); 
+
+      }
+    })
+
   }
+
+  static async addWSHost(user, userData) {
+    let err = null;
+    let updatedUser = null;
+    try {
+      updatedUser = await User.findOneAndUpdate({ googleId: user.googleId }, {wsData: userData.wsData}, {new: true})
+    } catch (_) {
+      err = new Error('Database Error');
+    }
+
+    return new Promise((resolve, reject) =>{
+      if (err != null) {
+        reject(err);
+      } else if (updatedUser == null) {
+        reject(new Error('Could not Find User! This shouldn\'t Happen'))
+      } else {
+        resolve({user: updatedUser.givenName, wsData: updatedUser.wsData})
+      }
+    })
+
+
+    
+    
+  }
+
+  //TODO
 
 }
 export default Api;

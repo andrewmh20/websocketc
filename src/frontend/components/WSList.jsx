@@ -48,7 +48,7 @@ class WSList extends React.Component {
 
         </Table>
 
-        {/* TODO: Change all this UI etc. */}
+        {/* TODO: Change all this UI etc. and form handling to be better*/}
         <Form>
           <Form.Group controlId="formBasicEmail">
             <Form.Label>Title</Form.Label>

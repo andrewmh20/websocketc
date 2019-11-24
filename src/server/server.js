@@ -60,7 +60,7 @@ server.use(passport.initialize());
 server.use(passport.session());
 
 passport.serializeUser(function(user, done) {
-  done(null, user._id);
+  done(null, user.id);
 });
 
 passport.deserializeUser(function(user, done) {
@@ -76,10 +76,13 @@ passport.use(new googleAuth.Strategy({
   clientSecret: CLIENT_SECRET,
   callbackURL: 'http://websocketc.com:3000/auth/google/callback'
 },
-function(accessToken, refreshToken, profile, done) {
-
-  Api.getOrCreateUser(profile.id, profile.name.givenName, done);
-
+async function(accessToken, refreshToken, profile, done) {
+  try {
+    const user = await Api.getOrCreateUser(profile.id, profile.name.givenName);
+    done(null,user);
+  } catch (err) {
+    done(err);
+  } 
 }
 ));
 
@@ -130,37 +133,34 @@ server.get('/App', (_, res) => {
 
 
 
+//TODO: async await the handlers...
 //API endpoint to send user stuff, only if authenticated I.e. 0th user in this case
-server.get('/api/getUserData', (req, res) => {
-  console.log(req.user);
-  Api.getUserData(req.user, (err,userData) => {
-    if (err) {
-      //TODO; make this better
-      res.redirect('/');
-    } else {
-      console.log(userData);
-      res.send(userData);
-    }
+server.get('/api/getUserData', async (req, res) => {
+  // console.log(req.user);
+  try {
+    const userData = await Api.getUserData(req.user);
+    res.send(userData);
+
+  } catch (err) {
+    res.redirect('/');
+
   }
-  );
 })
 
 //TODO refresh of page shouldnt give errors
 
-server.post('/api/addWSHost', (req, res) => {
-//TODO: Databse call
-  Api.addWSHost(req.user, req.body, (err,userData) => {
-    if (err) {
-      //TODO; make this better
-      res.redirect('/');
-    } else {
-      // console.log(userData);
-      res.send(userData);
-    }
-  } 
-  );
-  // res.send(userData[0]);
-  // res.status(200); //Correct? Needed?
+server.post('/api/addWSHost', async (req, res) => {
+//TODO: auth
+  try {
+    const userData = await Api.addWSHost(req.user, req.body);
+    res.send(userData);
+
+  } catch (err) {
+    res.redirect('/');
+
+  }
+    
+
 })
 
 //TODO: Refactor this so I dont rely on names of object on host
