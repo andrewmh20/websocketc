@@ -1,6 +1,6 @@
 import React from 'react'
 import WSHeader from './WSHeader';
-import WSListContainer from './WSListContainer';
+import WSList from './WSList';
 import axios from 'axios';
 import WSTerminal from './WSTerminal';
 import Alert from 'react-bootstrap/Alert'
@@ -53,7 +53,8 @@ class WSContainer extends React.Component {
             </p>
           </Alert>
           <WSHeader user={this.state.user} />
-          <WSListContainer wsData ={this.state.wsData} handleConnect = {this.handleConnect}
+          <WSList
+         wsData ={this.state.wsData} handleConnect = {this.handleConnect}
             handleDelete = {this.handleDelete} 
             handleAdd = {this.handleAdd}/>
         </div>
@@ -64,7 +65,8 @@ class WSContainer extends React.Component {
 
         <div>
           <WSHeader user={this.state.user} />
-          <WSListContainer wsData ={this.state.wsData} handleConnect = {this.handleConnect}
+          <WSList
+         wsData ={this.state.wsData} handleConnect = {this.handleConnect}
             handleDelete = {this.handleDelete} 
             handleAdd = {this.handleAdd}/>
           
