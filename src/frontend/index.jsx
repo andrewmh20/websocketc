@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom'
-import App from './components/App'
+
+import Routing from './components/Routing'
+
 
 // import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -8,8 +10,11 @@ import App from './components/App'
 
 //TODO: Register Service worker?
 
+
+
+
 document.addEventListener('DOMContentLoaded', () => {
-  ReactDOM.render(<App />, document.getElementById('root'));
+  ReactDOM.render(<Routing/>, document.getElementById('root'));
 })
 
 

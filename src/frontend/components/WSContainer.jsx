@@ -4,18 +4,47 @@ import WSList from './WSList';
 import axios from 'axios';
 import WSTerminal from './WSTerminal';
 import Alert from 'react-bootstrap/Alert'
+import {Redirect} from 'react-router-dom'
+import { throws } from 'assert';
 class WSContainer extends React.Component {
 
 
 
   constructor(props) {
     super(props);
-    this.state = this.props.initState;
+    this.routeProps = this.props.location;
+    // console.log('WSC appState:' + this.routeProps.state.appState);
+
+    //Restore state (WS data, user etc.)
+    this.state = this.routeProps.state.appState;
+
+    // this.state = {error: null, activeWS: null, wsData:[{name:null, url:null}], user:null};
+
+    console.log(this.routeProps);
+
+    //Update variable/local state from props
+    this.state.error = this.routeProps.state.error;
+    this.state.activeWS = this.routeProps.state.activeWS;
+
+    this.props.history.replace('/console', {appState: this.state, error: null}) 
+
+    // this.props.history.replace() 
+
+
+    // console.log(this.routeProps.state.error);
+    // console.log('ACTIVE:' + this.routeProps.state.activeWS);
+    // console.log('ACTIVE: State' + this.state.activeWS);
+    console.log(this.state);
+
+
+    // this.state.error = this.routeProps.state.error;
+    // this.state.activeWS = this.routeProps.state.activeWS;
+    
     //{user: null, wsData: [], activeWS: null, error: null}
     // console.log(this.state);
 
     this.handleConnect = this.handleConnect.bind(this);
-    this.handleDisconnect = this.handleDisconnect.bind(this);
+    // this.handleDisconnect = this.handleDisconnect.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleAdd = this.handleAdd.bind(this);
 
@@ -23,24 +52,55 @@ class WSContainer extends React.Component {
 
   }
 
+  componentDidMount() {
+    axios.get('/api/getUserData').then(res => {
+      this.setState(res.data);
+      // this.setState({ ready: true })
+    },
+    err => {
+      console.log('AXIOS ERROR' + err);
+    });
+  }
 
+  //Maybe move this logic out of render and store in field?
 
   render() {
     if (this.state.activeWS) {
-      console.log(this.state.activeWS)
-      return <WSTerminal url = {this.state.activeWS} handleDisconnect = {this.handleDisconnect}></WSTerminal>;
-    } else if (this.state.alerted) {
+      console.log('ACTIVE in Render:' + this.state.activeWS);
+
+      console.log('REDNER1');
+
+      return (<Redirect push to={{
+        pathname: '/terminal',
+        // handlers: {
+        //   handleDisconnect: this.handleDisconnect
+
+        // },
+        state: {
+          activeWS: this.state.activeWS,
+          appState: this.state   
+        }
+      }} />)
+      // return <WSTerminal url = {this.state.activeWS} handleDisconnect = {this.handleDisconnect}></WSTerminal>;
+    } else if (this.state.error) {
+      console.log('REDNER2');
+
+      //TODO swtich this to 1 return with variables?
       //TODO move styling to CSS
       return (
-          
-      //TODO: Change this to a Toast
         <div>
-          <Alert variant="danger" onClose={() => this.setState({alerted: false, error: null})} dismissible>
+          <Alert variant="danger" onClose={() => {
+            console.log(this.props.location);
+            console.log(this.props.history);
+            this.setState({error: null}); 
+            // this.props.location.state.error = null;
+          }} dismissible>
             <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
             <p>
               {this.state.error.message}
             </p>
           </Alert>
+          {/* This could be issue now with auth */}
           <WSHeader user={this.state.user} />
           <WSList
             wsData ={this.state.wsData} handleConnect = {this.handleConnect}
@@ -68,11 +128,12 @@ class WSContainer extends React.Component {
   handleConnect(url) {
     this.setState({activeWS: url})
   }
-  handleDisconnect(err) {
-    this.setState({activeWS: null, alerted: true, error: err})
+  // handleDisconnect(err) {
+  //   console.log('Here in WSC')
+  //   this.setState({activeWS: null, error: err})
 
-    //TODO Be more descriptive
-  }
+  //   //TODO Be more descriptive
+  // }
   handleDelete(WSItemIndex) {
     console.log(WSItemIndex);
     console.log(this.state.wsData);
@@ -99,23 +160,38 @@ class WSContainer extends React.Component {
   handleAdd(title, url) {
 
     //TODO: Deal with adding duplicates
-    if (title && url) {
-      //Todo better validation
-      console.log(title)
-      console.log(url)
+    if (url) {
+      //TODO better validation and alert on fail
+      // console.log(title)
+      // console.log(url)
     
       const tempArr = this.state.wsData; 
       console.log(tempArr);
-      tempArr.push({name: title, url: url});
-      axios.post('/api/updateWSHosts', {user: this.state.user, wsData: tempArr})
-        .then(res=>{
-          this.setState(res.data);
-          console.log('Added')
+      console.log(tempArr.includes({name:title, url:url}))
+      //TODO deal with isolateing _id
 
-
+      let dup = false;
+      for (let i = 0; i < tempArr.length; i++) {
+        if (tempArr[i].url === url) {
+          dup = true;
         }
+      }
+      if (dup) {
+        
+        this.setState({error: new Error('Duplicate')});
 
-        )
+      } else {
+
+      
+        tempArr.push({name: title, url: url});
+        axios.post('/api/updateWSHosts', {user: this.state.user, wsData: tempArr})
+          .then(res=>{
+            this.setState(res.data);
+          // console.log('Added')
+          }
+
+          )
+      }
     }
   }
 

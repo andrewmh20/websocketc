@@ -2,16 +2,14 @@
 import React from 'react'
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
-import Form from 'react-bootstrap/Form'
-
+import ButtonToolbar from 'react-bootstrap/ButtonToolbar'
+import WSForm from './WSForm'
 class WSList extends React.Component {
   //TODO: Rename to WSList?
 
   constructor(props) {
-    super(props)
-    this.newWSurl = null;
-    this.newWSTitle = null;
-    
+    super(props)    
+
   }
 
   //TODO: DECIDE how to order lists
@@ -25,10 +23,12 @@ class WSList extends React.Component {
       wsRow.push(<td key={i + 'c0'}>{wsData[i].name}</td>);
       wsRow.push(<td key={i + 'c1'}>{wsData[i].url}</td> );
       wsRow.push(<td key={i + 'c2'}>
-        <Button onClick = {() => this.props.handleConnect(wsData[i].url)}>Connect
-        </Button>
-        <Button className="delete" onClick = {() => this.props.handleDelete(i)}>Delete
-        </Button>
+        <ButtonToolbar aria-label='Connect and Delete Buttons'>
+          <Button className = 'mr-2' onClick = {() => this.props.handleConnect(wsData[i].url)}>Connect
+          </Button>
+          <Button variant= 'danger' className="delete" onClick = {() => this.props.handleDelete(i)}>Delete
+          </Button>
+        </ButtonToolbar>
         
       </td>);
 
@@ -39,7 +39,8 @@ class WSList extends React.Component {
 
     return (
       <div>
-        <Table>
+        <WSForm handleAdd = {this.props.handleAdd} />
+        <Table bordered='true'>
           <tbody>
             {wsItems}
           </tbody>
@@ -51,21 +52,6 @@ class WSList extends React.Component {
 
 
         {/* TODO: Change all this UI etc. and form handling to be better*/}
-        <Form>
-          <Form.Group controlId="formBasicEmail">
-            <Form.Label>Title</Form.Label>
-            <Form.Control onChange= {(e) => this.newWSTitle = e.target.value}type="text" placeholder="WS connection 1" />
-          </Form.Group>
-
-          <Form.Group controlId="formBasicPassword">
-            <Form.Label>URL</Form.Label>
-            <Form.Control onChange= {(e) => this.newWSurl = e.target.value} type="url" placeholder="ws://localhost:8080" />
-          </Form.Group>
-          <Button onClick= {() => this.props.handleAdd(this.newWSTitle, this.newWSurl)}variant="primary" type="button">
-    Add
-          </Button>
-        </Form>
-        <Button href='/auth/logout'>Logout</Button>
       </div>
     )
   }

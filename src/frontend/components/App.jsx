@@ -1,39 +1,56 @@
 import React from 'react'
+
+
 import WSContainer from './WSContainer';
 import axios from 'axios';
-import Button from 'react-bootstrap/Button';
+import LoginContainer from './LoginContainer'
+
+import {Redirect} from 'react-router-dom'
 
 class App extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { ready: false };
     axios.get('/api/getUserData').then(res => {
-      // console.log(res.data);
-      // this.setState({user: res.data.user, wsData: res.data.wsData});
       this.setState(res.data);
-      this.setState({ready: true})
-    }, 
+      this.setState({ ready: true })
+    },
     err => {
       console.log('AXIOS ERROR' + err);
     });
-    
-    // {user: null, ready: false};
+
+
+
   }
 
 
 
 
-  
+
   render() {
     console.log(this.state);
 
-    const startPage = this.state.user && this.state.ready ?
-      <WSContainer initState= {this.state} /> 
-      : <Button href = '/auth/login'>Login</Button>
+    let startPage = <div></div>
+
+    if (this.state.ready) {
+      startPage = this.state.user ?
+
+        <Redirect to={{
+          pathname: '/console',
+          state: {
+            appState: {error: null, activeWS: null, wsData:[{name:null, url:null}], user:null},
+            activeWS: null,
+            error: null
+          }
+        }} />
+        // <WSContainer initState= {this.state} /> 
+        : <Redirect to= '/welcome'/>
+
+    }
 
     return (
-      
+
       <div>
         {startPage}
       </div>
