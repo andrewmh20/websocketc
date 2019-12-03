@@ -25,7 +25,7 @@ class Routing extends React.Component {
           <Route exact path="/console" component={WSContainer} />
           <Route exact path="/terminal" component={WSTerminal} />
           {/* TODO: Make terminal not accesible from here by passing prop if was redirected or not */}
-          {/* <Route component={Notfound} /> */}
+          <Route component={Notfound} />
         </Switch>
       </Router>
       

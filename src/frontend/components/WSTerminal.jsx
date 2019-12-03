@@ -42,6 +42,7 @@ class WSTerminal extends React.Component {
 
   render() {
     //TODO: Move this to CSS?
+    // console.log(this.state.activeWS);
     if (!this.state.activeWS) {
       // console.log('WST appState:' + this.state.appState);
       return (
@@ -87,7 +88,7 @@ class WSTerminal extends React.Component {
   }
   
   componentWillUnmount() {
-    this.closeWS
+    this.closeWS();
     // this.handleDisconnect({reason: 'Back Button'});
   }
 
