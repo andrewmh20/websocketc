@@ -39,7 +39,7 @@ class App extends React.Component {
         <Redirect to={{
           pathname: '/console',
           state: {
-            appState: {error: null, activeWS: null, wsData:[{name:null, url:null}], user:null},
+            appState: {error: null, activeWS: null, wsData:[{name:null, url:null}], user:true},
             activeWS: null,
             error: null
           }

@@ -41,6 +41,16 @@ class WSList extends React.Component {
       <div>
         <WSForm handleAdd = {this.props.handleAdd} />
         <Table bordered='true'>
+          <thead>
+            <tr>
+
+              <th>Connection Name</th>
+              <th>Hostname or IP</th>
+              <th></th>
+
+            </tr>
+          </thead>
+
           <tbody>
             {wsItems}
           </tbody>

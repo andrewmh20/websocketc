@@ -1,19 +1,52 @@
-.terminal{
+#terminal{
     white-space: pre-wrap;
-    overflow: scroll;
-     height: 100%;
-      width: 100%;
-      background: black;
-      opacity: .2;
-      color: white;
+    overflow-y: scroll;
+
+    height: 100vh;
+    width: 100vw;
+    /* background:darkgreen; */
+    /* opacity: .4; */
+    color:white;
+      font-family: monospace;
+      font-size: 3vw;
+      display: flex;
+      /* scrollbar-track-color: darkgreen; */
+}
+.autoScroll{
+    flex-direction: column-reverse;
+}
+  
+
+#WS-Terminal{
+    background:darkgreen;
+    /* height: 100%; */
+    min-height: 100vh;
+    
+
+
 }
 
+html{
+    height: 100%;
+}
+body {
+height: 100%;
+}
+#root{
+    height: 100%;
+}
 #login{
     color: blue;
 }
 
+#not-found{
+    color:red;
+    font-size: 5vw;
+    font-family: cursive;
+}
 .jumbotron
 {
 background-color:#A05F5F;
+height: 100vh;
 }
 //TODO: mime type error??
