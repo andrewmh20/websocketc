@@ -1,16 +1,16 @@
 import React from 'react'
 import Button from 'react-bootstrap/Button'
-import {Redirect} from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 class NotFound extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {redir: false}
+    this.state = { redir: false }
   }
 
   render() {
-    let page = <div/>
+    let page = <div />
     if (this.state.redir) {
       page = <Redirect to={{
         pathname: '/',
@@ -19,7 +19,7 @@ class NotFound extends React.Component {
     } else {
       page = <div>
         <h1 id='not-found'>THIS ROUTE WAS NOT FOUND (404)</h1>
-        <Button onClick={() => this.setState({redir: true})} size='lg'>Return to Home</Button> 
+        <Button onClick={() => this.setState({ redir: true })} size='lg'>Return to Home</Button>
       </div>
 
     }

@@ -10,26 +10,21 @@ router.get('/google/login',
   ));
 
 //TODO: This allows for multiple auth strategies in the future
-router.get('/login', (req,res)=>{
+router.get('/login', (req, res) => {
   res.redirect('/auth/google/login');
 
 });
 
-router.get('/logout', function(req, res) {
+router.get('/logout', function (req, res) {
   req.logout();
   res.redirect('/');
 });
 
 
-//TODO Handle errors
-router.get('/google/callback', 
-//TODO: redirect to "login failed page"
-  passport.authenticate('google', {failureRedirect: '/' , successRedirect: '/'})
-  // (req, res) => {
-  //   // Successful authentication, redirect home.
-  //  res.redirect('/App');
-  // }
+router.get('/google/callback',
+  passport.authenticate('google', { failureRedirect: '/', successRedirect: '/' })
+
 );
 
 export default router;
-  
+

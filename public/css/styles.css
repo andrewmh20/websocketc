@@ -26,6 +26,11 @@
 
 }
 
+.console{
+    background-color: cadetblue;
+    height: 100%;
+}
+
 html{
     height: 100%;
 }
@@ -49,4 +54,3 @@ height: 100%;
 background-color:#A05F5F;
 height: 100vh;
 }
-//TODO: mime type error??

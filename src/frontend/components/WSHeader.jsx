@@ -12,23 +12,21 @@ class WSHeader extends React.Component {
   render() {
     return (
       this.props.user ?
-        // <div>
-        <Container fluid> 
+        <Container fluid>
           <Row>
             <Col>
-          
+
               <h1>
-          Welcome {this.props.user}!
+                Welcome {this.props.user}!
               </h1>
             </Col>
             <Col>
-              <Button variant ='info' className='float-right' href='/auth/logout'>Logout</Button>
+              <Button variant='info' className='float-right' href='/auth/logout'>Logout</Button>
             </Col>
           </Row>
         </Container>
-        // </div> 
-        : 
-        <h2>              </h2> 
+        :
+        <h2></h2>
     )
   }
 }

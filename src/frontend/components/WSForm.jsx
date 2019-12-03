@@ -9,8 +9,8 @@ class WSForm extends React.Component {
 
     this.placeholderTitle = 'My Home Server'
     this.placeholderURL = 'ws://localhost:8080'
-    this.state = {title: '', url: ''};
-        
+    this.state = { title: '', url: '' };
+
     this.handleSubmit.bind(this);
   }
 
@@ -19,15 +19,15 @@ class WSForm extends React.Component {
       <Form>
         <Form.Group>
           <Form.Label>Title</Form.Label>
-          <Form.Control onChange= {(e) => this.newWSTitle = e.target.value}type="text" placeholder= {this.placeholderTitle}/>
+          <Form.Control onChange={(e) => this.newWSTitle = e.target.value} type="text" placeholder={this.placeholderTitle} />
         </Form.Group>
 
         <Form.Group >
           <Form.Label>URL</Form.Label>
-          <Form.Control onChange= {(e) => this.newWSurl = e.target.value} type="url" placeholder={this.placeholderURL} />
+          <Form.Control onChange={(e) => this.newWSurl = e.target.value} type="url" placeholder={this.placeholderURL} />
         </Form.Group>
-        <Button onClick= {() => this.handleSubmit(this.props.handleAdd) }variant="primary" type="button">
-        Add
+        <Button onClick={() => this.handleSubmit(this.props.handleAdd)} variant="primary" type="button">
+          Add
         </Button>
       </Form>
     )
@@ -35,8 +35,8 @@ class WSForm extends React.Component {
 
   handleSubmit(handler) {
     handler(this.newWSTitle, this.newWSurl);
-    this.setState({tile: this.placeholderTitle});
-    this.setState({url: this.placeholderURL})
+    this.setState({ tile: this.placeholderTitle });
+    this.setState({ url: this.placeholderURL })
   }
 }
 

@@ -31,46 +31,32 @@ class WSTerminal extends React.Component {
 
     this.closeWS = this.closeWS.bind(this);
 
-    // this.termRef = React.createRef();
-    // console.log(this.state.appState.wsData)
 
 
 
   }
   isAuthenticated() {
-    console.log('AUTH: ' + this ?.state ?.appState ?.user)
     return this ?.state ?.appState ?.user;
 
   }
   componentDidMount() {
-    // try {
     if (this.isAuthenticated()) {
       this.createWS(this.state.activeWS);
 
     }
-    // } catch (err) {
-    // console.log(err);
-    // this.routeProps.handlers.handleDisconnect(err);
-    // this.state.activeWS = null;
-    // this.state.error = err;
-    // this.handleDisconnect(err);
-    // }
+
   }
 
   render() {
 
     if (!this.isAuthenticated()) {
-      console.log(!this.isAuthenticated())
       return (
         <Redirect to='/NotAuthorized' />
       )
     }
 
 
-    //TODO: Move this to CSS?
     else if (!this.state.activeWS) {
-      console.log('rendering')
-      // console.log('WST appState:' + this.state.appState);
       return (
         <Redirect to={{
           pathname: '/console',
@@ -86,8 +72,7 @@ class WSTerminal extends React.Component {
       if (this.state.autoscroll) {
         terminalClass += ' autoScroll'
       }
-      //TODO Really don't need container...
-      return ( this.state.connected ?
+      return (this.state.connected ?
         <Container fluid id='WS-terminal'>
           <Row>
 
@@ -98,42 +83,31 @@ class WSTerminal extends React.Component {
             </Col>
             <Col md='auto'>
 
-              {/* <Form>
-          <Form.Control type = ''/> */}
-              {/* <Form.Check
-                type='checkbox'
-                id='autoscroll'
-                label='Auto Scroll'
-                checked={this.state.autoscroll}
-                onChange={() => this.setState({ autoscroll: !this.state.autoscroll })}
-              /> */}
-              {/* </Form> */}
-              {/*TODO: Handle better than disconnect*/}
               <Row>
 
-              <Button variant='danger' onClick={() => this.closeWS()}>Close WSocket</Button>
-             </Row>
-             <Row>
-
-              <Button variant='info' onClick={() => this.downloadText(new Date())}> Download</Button>
+                <Button variant='danger' onClick={() => this.closeWS()}>Close WSocket</Button>
               </Row>
               <Row>
 
-              <Button variant='info' onClick={() => this.saveText(new Date())}> Save </Button>
+                <Button variant='info' onClick={() => this.downloadText(new Date())}> Download</Button>
               </Row>
               <Row>
 
-              <Button variant='info' onClick={() => {
-                const date = new Date();
-                this.saveText(date);
-                this.downloadText(date)
-              }
-              }> Save &amp; Download </Button>
-             </Row>
+                <Button variant='info' onClick={() => this.saveText(new Date())}> Save </Button>
+              </Row>
+              <Row>
+
+                <Button variant='info' onClick={() => {
+                  const date = new Date();
+                  this.saveText(date);
+                  this.downloadText(date)
+                }
+                }> Save &amp; Download </Button>
+              </Row>
 
             </Col>
           </Row>
-        </Container> : <div/>)
+        </Container> : <div />)
     }
   }
   saveText(date) {
@@ -141,16 +115,14 @@ class WSTerminal extends React.Component {
     let index = -1;
     for (let i = 0; i < tempArr.length; i++) {
       if (tempArr[i].url === this.state.activeWS) {
-        index  = i;
+        index = i;
       }
     }
-    console.log(tempArr[index]);
-    tempArr[index].saved.push({fileName: date.toISOString(), time: date.toLocaleString(), text: this.state.wsText});
+    tempArr[index].saved.push({ fileName: date.toISOString(), time: date.toLocaleString(), text: this.state.wsText });
 
     axios.post('/api/updateWSHosts', { user: this.state.user, wsData: tempArr })
       .then(res => {
-        this.setState({appState: res.data});
-        // console.log('Added')
+        this.setState({ appState: res.data });
       }
 
       )
@@ -170,9 +142,7 @@ class WSTerminal extends React.Component {
 
   componentWillUnmount() {
     if (this.isAuthenticated()) {
-      console.log(this.state.error);
       this.closeWS
-      // this.handleDisconnect({reason: 'Back Button'});
     }
   }
 
@@ -185,67 +155,45 @@ class WSTerminal extends React.Component {
       return;
     }
 
-    this.ws.onopen = () =>
-    {
-      this.setState({connected: true});
+    this.ws.onopen = () => {
+      this.setState({ connected: true });
 
     }
     this.ws.onmessage = (event) => {
       let data = this.state.wsText;
       data = data + event.data + '\r\n';
       this.setState({ wsText: data });
-      // console.log(this.state);
 
     };
 
-    // this.ws.onerror = (event) => {
-    //   console.log('Bad URL:' + event)
-    //   console.log( (event.code) ? event.code : 'A');
-    //   this.handleDisconnect('Error Code: ' + ((event.code) ? event.code : ''));
-    // }
     this.ws.onclose = (event) => {
-      this.setState({connected: false});
+      this.setState({ connected: false });
 
-      //TODO: Handle This
-      console.log('Closed: ' + event);
-      console.log(event);
-      //Make this diff from error-just disconnect
-      // this.routeProps.handlers.handleDisconnect(event);
       if (event.wasClean) {
         this.handleDisconnect(null);
       } else {
-        console.log('Imade it here')
-        console.log('Error Code: ' + ((event.code) ? event.code : ''))
-
 
         this.handleDisconnect('Error Code: ' + ((event.code) ? event.code : ''));
 
       }
-      // this.handleDisconnect(event);
     }
 
   }
   closeWS() {
     this.ws.close();
-    // this.routeProps.handlers.handleDisconnect({message: 'Closed on Purpose'});
-    // this.handleDisconnect(new Error('Closed on Purpose'));
   }
 
   handleDisconnect(message) {
-    console.log(message)
     if (message) {
-      console.log('Now hereII')
 
       this.setState({ activeWS: null, error: new Error(message) })
 
     } else {
-      console.log('Now hereEE')
 
       this.setState({ activeWS: null, error: null })
 
     }
 
-    //TODO Be more descriptive
   }
 
 

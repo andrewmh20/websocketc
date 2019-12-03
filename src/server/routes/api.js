@@ -1,16 +1,24 @@
 import express from 'express';
 import Api from './../db/api/api'
 
+
 const router = express.Router();
 
+const isAuthenticated = function isAuthenticated(req, res, next) {
+  if (req.user)
+    return next();
 
-router.get('/getUserData', async (req, res) => {
+  // IF A USER ISN'T LOGGED IN, THEN REDIRECT THEM SOMEWHERE
+  res.redirect('/NotAuthorized');
+}
+
+
+router.get('/getUserData', isAuthenticated, async (req, res) => {
   try {
     if (!req.user) {
       res.send({user:null});
     } else {
       const userData = await Api.getUserData(req.user);
-    //   userData.user = null;
       res.send(userData);
     }
   

@@ -28,3 +28,4 @@ Website to provide easy interface between users and their own servers running we
 * npm run watch 
 * In a new terminal, npm run start
 * Navigate to websocketc.com (currently redirects to localhost:3000 on the DNS side)
+* For full funcitonality, make sure you have a websocketd server running!

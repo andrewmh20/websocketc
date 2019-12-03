@@ -30,8 +30,6 @@ server.use(express.static(path.join(__dirname, '../../public/')))
 server.use(express.urlencoded({ extended: true }));
 server.use(express.json());
 
-//TODO: Change this URL
-//Need to use this as a promise? i.e. check fo rconnection error.
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/websocketc', 
   { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -73,23 +71,24 @@ server.use('/api', apiRoutes);
 server.use('/auth', authRoutes)
 
 
+const isAuthenticated = function isAuthenticated(req, res, next) {
+  if (req.user)
+    return next();
+
+  // IF A USER ISN'T LOGGED IN, THEN REDIRECT THEM SOMEWHERE
+  res.redirect('/NotAuthorized');
+}
+
+
 server.get('/', (req, res) => {
   res.render('App')
 })
-
-// server.get('/App', (req, res) => {
-//   console.log(req.user);
-//   res.render('App');
-// })
-
-
 
 
 server.get('*', (_,res) =>{
   res.render('App');
 });
 
-//TODO Error handling
 
 server.listen(process.env.PORT || 3000, () => {
   console.log('server listening on port ' + (process.env.PORT || 3000))

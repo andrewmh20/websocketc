@@ -4,11 +4,6 @@ class Api {
 
 
   static async getOrCreateUser(id, name) {
-
-
-    // let returnVal = {err: null, user: null};
-    // TODO: this is not ideal as it doesnt allow for the name changing on googles end. But okay for now.
-    // HJust want to elet google handle the passwords basically.
     
     let user = null;
     let error = null;
@@ -20,9 +15,7 @@ class Api {
     }
 
     if (user == null) {
-      // console.log('Making User')
       try {      
-        //TODO Whats this about? How to fix it
         // eslint-disable-next-line require-atomic-updates
         user = await User.create({ googleId: id, givenName: name});
       } catch (err) {
