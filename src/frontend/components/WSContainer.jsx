@@ -53,6 +53,8 @@ class WSContainer extends React.Component {
     this.handleDelete = this.handleDelete.bind(this);
     this.handleAdd = this.handleAdd.bind(this);
 
+    this.handleDeleteSaved = this.handleDeleteSaved.bind(this);
+
 
 
   }
@@ -116,7 +118,7 @@ class WSContainer extends React.Component {
             this.setState({error: null}); 
             // this.props.location.state.error = null;
           }} dismissible>
-            <Alert.Heading>Your WS connection has a problem</Alert.Heading>
+            <Alert.Heading>There was a Problem!</Alert.Heading>
             <p>
               {this.state.error.message}
             </p>
@@ -126,6 +128,7 @@ class WSContainer extends React.Component {
           <WSList
             wsData ={this.state.wsData} handleConnect = {this.handleConnect}
             handleDelete = {this.handleDelete} 
+            handleDeleteSaved = {this.handleDeleteSaved}
             handleAdd = {this.handleAdd}/>
         </div>
       
@@ -138,6 +141,7 @@ class WSContainer extends React.Component {
           <WSList
             wsData ={this.state.wsData} handleConnect = {this.handleConnect}
             handleDelete = {this.handleDelete} 
+            handleDeleteSaved = {this.handleDeleteSaved}
             handleAdd = {this.handleAdd}/>
           
         </div>
@@ -146,6 +150,33 @@ class WSContainer extends React.Component {
 
   }
 
+  handleDeleteSaved(i,j){
+    const tempArr = this.state.wsData;
+    console.log(tempArr);
+    console.log(i)
+    console.log(j)
+    const tempSaved = this.state.wsData[i].saved;
+    tempSaved.splice(j, 1);
+
+    tempArr[i].saved = tempSaved;
+    // tempArr[i].saved.splice(j, 1);
+    console.log(tempArr[i].saved);
+
+    //TODO Refactor this out to one function
+    // console.log({user: this.state.user, wsData: this.state.wsData.splice(WSItemIndex, 1)});
+    axios.post('/api/updateWSHosts', {user: this.state.user, wsData: tempArr})
+      .then(res =>{
+        console.log(res);
+        this.setState(res.data);
+        //This is in promise to make sure 
+        //that our stae is in sync with server. 
+        console.log('Deleted')
+
+        //TODO .catch
+      }
+      )
+
+  }
   handleConnect(url) {
     this.setState({activeWS: url})
   }
@@ -207,6 +238,7 @@ class WSContainer extends React.Component {
         tempArr.push({name: title, url: url});
         axios.post('/api/updateWSHosts', {user: this.state.user, wsData: tempArr})
           .then(res=>{
+            console.log(res.data);
             this.setState(res.data);
           // console.log('Added')
           }
@@ -217,13 +249,14 @@ class WSContainer extends React.Component {
   }
 
 
+
 }
 
 WSContainer.defaultProps = {
     
   location:{
     state: {
-      appState: {error: null, activeWS: null, wsData:[{name:null, url:null}], user:true},
+      appState: {error: null, activeWS: null, wsData:[{name:null, url:null, saved: []}], user:true},
       activeWS: null,
       error: null
     }

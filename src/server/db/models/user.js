@@ -5,7 +5,9 @@ import findOrCreate from 'mongoose-find-or-create'
 var userSchema = new mongoose.Schema({
   googleId: String,
   givenName: String,
-  wsData: [{name: String, url: String}]
+  wsData: [{name: String, url: String, 
+    saved: [{fileName: String, time: String, text: String}]
+  }]
 })
 userSchema.plugin(findOrCreate);
 

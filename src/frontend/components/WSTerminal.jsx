@@ -7,7 +7,8 @@ import { Redirect } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-
+import FileSaver from 'file-saver'
+import axios from 'axios'
 
 class WSTerminal extends React.Component {
 
@@ -16,11 +17,11 @@ class WSTerminal extends React.Component {
     super(props);
 
     this.isAuthenticated.bind(this);
-    if(!this?.props?.location?.state?.appState){
+    if (!this ?.props ?.location ?.state ?.appState) {
       return;
     }
     this.routeProps = this.props.location
-    this.state = { wsText: '', autoscroll: true, activeWS: null, error: null, appState: null };
+    this.state = { wsText: '', autoscroll: true, activeWS: null, error: null, appState: null, connected: false };
     this.state.activeWS = this.routeProps.state.activeWS;
 
     this.state.appState = this.routeProps.state.appState;
@@ -36,17 +37,17 @@ class WSTerminal extends React.Component {
 
 
   }
-  isAuthenticated(){
-    console.log('AUTH: ' + this?.state?.appState?.user)
-    return this?.state?.appState?.user;
+  isAuthenticated() {
+    console.log('AUTH: ' + this ?.state ?.appState ?.user)
+    return this ?.state ?.appState ?.user;
 
   }
   componentDidMount() {
     // try {
-      if(this.isAuthenticated()){
-        this.createWS(this.state.activeWS);
+    if (this.isAuthenticated()) {
+      this.createWS(this.state.activeWS);
 
-      }
+    }
     // } catch (err) {
     // console.log(err);
     // this.routeProps.handlers.handleDisconnect(err);
@@ -58,7 +59,7 @@ class WSTerminal extends React.Component {
 
   render() {
 
-    if(!this.isAuthenticated()){
+    if (!this.isAuthenticated()) {
       console.log(!this.isAuthenticated())
       return (
         <Redirect to='/NotAuthorized' />
@@ -68,7 +69,7 @@ class WSTerminal extends React.Component {
 
     //TODO: Move this to CSS?
     else if (!this.state.activeWS) {
-      console.log('rednering')
+      console.log('rendering')
       // console.log('WST appState:' + this.state.appState);
       return (
         <Redirect to={{
@@ -85,10 +86,11 @@ class WSTerminal extends React.Component {
       if (this.state.autoscroll) {
         terminalClass += ' autoScroll'
       }
-      return (
+      //TODO Really don't need container...
+      return ( this.state.connected ?
         <Container fluid id='WS-terminal'>
           <Row>
-            
+
             <Col>
               <Container id='terminal' className={terminalClass}>
                 {this.state.wsText}
@@ -107,49 +109,87 @@ class WSTerminal extends React.Component {
               /> */}
               {/* </Form> */}
               {/*TODO: Handle better than disconnect*/}
+              <Row>
+
               <Button variant='danger' onClick={() => this.closeWS()}>Close WSocket</Button>
+             </Row>
+             <Row>
+
+              <Button variant='info' onClick={() => this.downloadText(new Date())}> Download</Button>
+              </Row>
+              <Row>
+
+              <Button variant='info' onClick={() => this.saveText(new Date())}> Save </Button>
+              </Row>
+              <Row>
+
+              <Button variant='info' onClick={() => {
+                const date = new Date();
+                this.saveText(date);
+                this.downloadText(date)
+              }
+              }> Save &amp; Download </Button>
+             </Row>
+
             </Col>
           </Row>
-        </Container>)
+        </Container> : <div/>)
+    }
+  }
+  saveText(date) {
+    const tempArr = this.state.appState.wsData;
+    let index = -1;
+    for (let i = 0; i < tempArr.length; i++) {
+      if (tempArr[i].url === this.state.activeWS) {
+        index  = i;
+      }
+    }
+    console.log(tempArr[index]);
+    tempArr[index].saved.push({fileName: date.toISOString(), time: date.toLocaleString(), text: this.state.wsText});
+
+    axios.post('/api/updateWSHosts', { user: this.state.user, wsData: tempArr })
+      .then(res => {
+        this.setState({appState: res.data});
+        // console.log('Added')
+      }
+
+      )
+
+
+  }
+
+  downloadText(date) {
+    {
+      const toDownload = new Blob([this.state.wsText], { type: "text/plain;charset=utf-8" });
+      FileSaver.saveAs(toDownload, date.toISOString() + '.txt');
     }
   }
 
-  componentDidUpdate() {
-    
-    // console.log(this.state.autoscroll)
-    if (this.isAuthenticated() && this.state.autoscroll) {
-      // this.scrollToBottom();
-      // this.termRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
-
-    }
 
 
-  }
 
   componentWillUnmount() {
-    if(this.isAuthenticated()){
-    console.log(this.state.error);
-    this.closeWS
-    // this.handleDisconnect({reason: 'Back Button'});
+    if (this.isAuthenticated()) {
+      console.log(this.state.error);
+      this.closeWS
+      // this.handleDisconnect({reason: 'Back Button'});
     }
   }
 
-  scrollToBottom() {
-    animateScroll.scrollToBottom({
-      containerId: 'terminal'
-    });
-  }
 
   createWS(address) {
     try {
       this.ws = new WebSocket(address);
-
     } catch (err) {
       this.setState({ activeWS: null, error: new Error('Unable to open Socket. Check your spelling?\n' + err.message) })
       return;
     }
-  
 
+    this.ws.onopen = () =>
+    {
+      this.setState({connected: true});
+
+    }
     this.ws.onmessage = (event) => {
       let data = this.state.wsText;
       data = data + event.data + '\r\n';
@@ -164,6 +204,8 @@ class WSTerminal extends React.Component {
     //   this.handleDisconnect('Error Code: ' + ((event.code) ? event.code : ''));
     // }
     this.ws.onclose = (event) => {
+      this.setState({connected: false});
+
       //TODO: Handle This
       console.log('Closed: ' + event);
       console.log(event);
@@ -177,7 +219,7 @@ class WSTerminal extends React.Component {
 
 
         this.handleDisconnect('Error Code: ' + ((event.code) ? event.code : ''));
-        
+
       }
       // this.handleDisconnect(event);
     }

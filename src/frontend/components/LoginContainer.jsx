@@ -50,6 +50,7 @@ console.log(this.state)
     } else {
       // if (this.state.ready) {
       if (this.state.user) {
+        console.log(this.state)
         page = <div className = 'text-center' id='login'>
           <Jumbotron>
             <h1>Welcome to Websocketc {this.state.user}!</h1>

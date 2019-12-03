@@ -23,6 +23,7 @@ class Api {
       // console.log('Making User')
       try {      
         //TODO Whats this about? How to fix it
+        // eslint-disable-next-line require-atomic-updates
         user = await User.create({ googleId: id, givenName: name});
       } catch (err) {
         error = err;
@@ -80,6 +81,8 @@ class Api {
       }
     })
   }
+
+  
 
 
 }
