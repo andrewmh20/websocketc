@@ -25,7 +25,7 @@ class App extends React.Component {
   }
 
 
-
+  //TODO: Can make databse call in WS container only when needed i.e. props not passed
 
 
   render() {
@@ -34,18 +34,25 @@ class App extends React.Component {
     let startPage = <div></div>
 
     if (this.state.ready) {
-      startPage = this.state.user ?
+      // startPage = this.state.user ?
 
-        <Redirect to={{
-          pathname: '/console',
-          state: {
-            appState: {error: null, activeWS: null, wsData:[{name:null, url:null}], user:true},
-            activeWS: null,
-            error: null
-          }
-        }} />
-        // <WSContainer initState= {this.state} /> 
-        : <Redirect to= '/welcome'/>
+      //   <Redirect to={{
+      //     pathname: '/console',
+      //     state: {
+      //       appState: {error: null, activeWS: null, wsData:this.state.wsData, user:this.state.user},
+      //       activeWS: null,
+      //       error: null
+      //     }
+      //   }} />
+      //   // <WSContainer initState= {this.state} /> 
+      //   : 
+      startPage = <Redirect to= {{pathname:'/welcome',
+        state:{
+          user: this.state.user,
+          wsData: this.state.wsData
+        }
+      }
+      }/>
 
     }
 

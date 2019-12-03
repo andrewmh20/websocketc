@@ -14,9 +14,9 @@ class WSContainer extends React.Component {
   constructor(props) {
     super(props);
     this.isAuthenticated.bind(this);
-    // if(!this?.props?.location?.state?.appState?.user){
-    //   return;
-    // }
+    if(!this?.props?.location?.state?.appState?.user){
+      return;
+    }
     this.routeProps = this.props.location;
     // console.log('WSC appState:' + this.routeProps.state.appState);
 
@@ -66,14 +66,14 @@ class WSContainer extends React.Component {
 
   componentDidMount() {
     // if(this.isAuthenticated()){
-    axios.get('/api/getUserData').then(res => {
-      this.setState(res.data);
-      // this.setState({ ready: true })
-    },
-    err => {
-      console.log('AXIOS ERROR' + err);
-    });
-  // }
+  //   axios.get('/api/getUserData').then(res => {
+  //     this.setState(res.data);
+  //     // this.setState({ ready: true })
+  //   },
+  //   err => {
+  //     console.log('AXIOS ERROR' + err);
+  //   });
+  // // }
   }
 
   //Maybe move this logic out of render and store in field?

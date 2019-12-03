@@ -127,13 +127,9 @@ class WSTerminal extends React.Component {
   }
 
   componentWillUnmount() {
-<<<<<<< HEAD
-    this.closeWS();
-=======
     if(this.isAuthenticated()){
     console.log(this.state.error);
     this.closeWS
->>>>>>> dev
     // this.handleDisconnect({reason: 'Back Button'});
     }
   }
