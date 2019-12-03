@@ -10,6 +10,8 @@ import WSTerminal from './WSTerminal';
 import WSContainer from './WSContainer';
 import App from './App'
 import LoginContainer from './LoginContainer';
+import NotFound from './NotFound.jsx'
+import NotAuthorized from './NotAuthorized.jsx'
 
   
 class Routing extends React.Component {
@@ -25,7 +27,10 @@ class Routing extends React.Component {
           <Route exact path="/console" component={WSContainer} />
           <Route exact path="/terminal" component={WSTerminal} />
           {/* TODO: Make terminal not accesible from here by passing prop if was redirected or not */}
-          {/* <Route component={Notfound} /> */}
+          <Route exact path='/NotFound' component={NotFound} />
+          <Route exact path='/NotAuthorized' component={NotAuthorized} />
+          <Route component={NotFound} />
+
         </Switch>
       </Router>
       

@@ -6,12 +6,17 @@ import WSTerminal from './WSTerminal';
 import Alert from 'react-bootstrap/Alert'
 import {Redirect} from 'react-router-dom'
 import { throws } from 'assert';
+import NotAuthorized from './NotAuthorized'
 class WSContainer extends React.Component {
 
 
 
   constructor(props) {
     super(props);
+    this.isAuthenticated.bind(this);
+    // if(!this?.props?.location?.state?.appState?.user){
+    //   return;
+    // }
     this.routeProps = this.props.location;
     // console.log('WSC appState:' + this.routeProps.state.appState);
 
@@ -52,7 +57,15 @@ class WSContainer extends React.Component {
 
   }
 
+  isAuthenticated(){
+    // console.log('AUTH: ' + this?.state?.appState?.user)
+    return this?.state?.user;
+
+  }
+
+
   componentDidMount() {
+    // if(this.isAuthenticated()){
     axios.get('/api/getUserData').then(res => {
       this.setState(res.data);
       // this.setState({ ready: true })
@@ -60,12 +73,19 @@ class WSContainer extends React.Component {
     err => {
       console.log('AXIOS ERROR' + err);
     });
+  // }
   }
 
   //Maybe move this logic out of render and store in field?
 
   render() {
-    if (this.state.activeWS) {
+    if (!this.isAuthenticated()) {
+      return (
+        <Redirect to='/NotAuthorized' />
+      )
+    }
+
+    else if (this.state.activeWS) {
       console.log('ACTIVE in Render:' + this.state.activeWS);
 
       console.log('REDNER1');
@@ -79,6 +99,7 @@ class WSContainer extends React.Component {
         state: {
           activeWS: this.state.activeWS,
           appState: this.state   
+
         }
       }} />)
       // return <WSTerminal url = {this.state.activeWS} handleDisconnect = {this.handleDisconnect}></WSTerminal>;
@@ -95,7 +116,7 @@ class WSContainer extends React.Component {
             this.setState({error: null}); 
             // this.props.location.state.error = null;
           }} dismissible>
-            <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
+            <Alert.Heading>Your WS connection has a problem</Alert.Heading>
             <p>
               {this.state.error.message}
             </p>
@@ -198,5 +219,15 @@ class WSContainer extends React.Component {
 
 }
 
+WSContainer.defaultProps = {
+    
+  location:{
+    state: {
+      appState: {error: null, activeWS: null, wsData:[{name:null, url:null}], user:true},
+      activeWS: null,
+      error: null
+    }
+  }
+}
 
 export default WSContainer;

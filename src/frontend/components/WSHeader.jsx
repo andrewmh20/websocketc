@@ -28,7 +28,7 @@ class WSHeader extends React.Component {
         </Container>
         // </div> 
         : 
-        <h2>Retrieving User Data...</h2> 
+        <h2>              </h2> 
     )
   }
 }

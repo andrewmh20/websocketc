@@ -10,6 +10,7 @@ router.get('/getUserData', async (req, res) => {
       res.send({user:null});
     } else {
       const userData = await Api.getUserData(req.user);
+    //   userData.user = null;
       res.send(userData);
     }
   
