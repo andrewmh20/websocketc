@@ -1,31 +1,21 @@
 # websocketc
-Website to provide easy interface between users and their own servers running websocketd.
+Website to provide easy interface between users and their own servers running [websocketd](http://websocketd.com/).
 
-# Currently under active development
+# Details & Use Case
+I found that I had command line programs that output text to STDOUT, and I wanted to view that text remotely, including from my phone. One option was ssh-ing into the server everytime, but that didn't give a great view of the terminal, and it could lead to accidentally closing the program or running other commands. I wanted an easy read-only view into what was being sent to STDOUT.
 
-## To run locally:
-* npm run watch 
-* In a new terminal, npm run start
-* Navigate to websocketc.com (currently redirects to localhost:3000 on the DNS side)
-* For full funcitonality, make sure you have a websocketd server running!
+I then found websocketd, which perfectly fit my use case on the server side. However, I still had no way to connect to the websocket server and nicely view the output. Thus came websocketc--a web interface for managing and viewing all my websocketd, or for that matter and websocket servers that are purely sending text.
 
-# CIS197 Milestones
+Websocketc allows you to keep a central list of all your servers, connect to them, save and download the output text.
 
-## Milestone 1 - Complete
-* Main functionality flow from websocketd to displaying text in browser
-* Ability to add and remove WS severs
-* Basic UI to facilitate the above functionality 
+# Quickstart
 
-## Milestone 2 - Complete
-* Beginning of database integration
-* Beginning of user login
-* Full functionality is better in last milestone, this is work in progress for data persistence and users
+Simply go to <websocketc.com> and log in. Authentication is securely handled by Google. You can then add,
+manage, and connect to any websocket connections that you have exposed to the internet.
 
-## Milestone 3 - Complete for Submission
-* Finalize auth/database -- Auth and database now works as was expected for Milestone 2
-* UI Prettiness (move routing to client)
-* Better Error handling
-* Refactor code for style
-* Can Save, download, and delete, past websockets text
+# Future Plans
+
+Currently there is just basic functionality working. Some future plans include more robust design, better UI, and 
+authentication options besides Google.
 
 
