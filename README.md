@@ -16,6 +16,6 @@ manage, and connect to any websocket connections that you have exposed to the in
 # Future Plans
 
 Currently there is just basic functionality working. Some future plans include more robust design, better UI, and 
-authentication options besides Google.
+authentication options besides Google. 
 
 
