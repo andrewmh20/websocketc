@@ -65,5 +65,5 @@ typings/
 .vscode
 .DS_Store
 .pdf
-#/server/keys/
+/src/server/keys/
 #TODO: Remove keys!
