@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon --exec babel-node src/server/server.js",
-    "watch": "webpack --watch"
+    "watch": "webpack --watch",
+    "heroku-postbuild": "webpack -p"
   },
   "repository": {
     "type": "git",
@@ -47,7 +48,7 @@
     "react-dom": "^16.11.0",
     "react-router-dom": "^5.1.2",
     "react-scroll": "^1.7.14",
-    "webpack": "^4.40.2",
+    "webpack": "^4.41.4",
     "webpack-cli": "^3.3.8"
   }
 }
