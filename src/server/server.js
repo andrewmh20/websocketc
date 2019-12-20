@@ -53,9 +53,9 @@ passport.deserializeUser(function(user, done) {
 
 
 passport.use(new googleAuth.Strategy({
-  clientID: CLIENT_ID,
-  clientSecret: CLIENT_SECRET,
-  callbackURL: 'http://websocketc.com:3000/auth/google/callback'
+  clientID: process.env.CLIENT_ID || CLIENT_ID,
+  clientSecret: process.env.CLIENT_SECRET || CLIENT_SECRET,
+  callbackURL: 'http://websocketc.com/auth/google/callback'
 },
 async function(accessToken, refreshToken, profile, done) {
   try {
