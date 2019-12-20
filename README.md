@@ -10,7 +10,7 @@ Websocketc allows you to keep a central list of all your servers, connect to the
 
 # Quickstart
 
-Simply go to <websocketc.com> and log in. Authentication is securely handled by Google. You can then add,
+Simply go to <https://websocketc.com> and log in. Authentication is securely handled by Google. You can then add,
 manage, and connect to any websocket connections that you have exposed to the internet.
 
 # Future Plans
