@@ -52,7 +52,7 @@ class LoginContainer extends React.Component {
               <h2>Click Below to login with your Google Account</h2>
               <Button href='/auth/login' size='lg'>Login</Button>
               <h2>Websocketc is a website that provides an easy interface between users and their own servers running websocketd.</h2>
-              <h3>Check us out on<a href='https://github.com/andrewmh20/websocketc'></a>GitHub for more details!</h3>
+              <h3>Check us out on<a href='https://github.com/andrewmh20/websocketc'> GitHub </a>for more details!</h3>
             </Jumbotron>
           </div>
         }
