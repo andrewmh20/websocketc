@@ -6,7 +6,7 @@ import authRoutes from './routes/auth'
 
 import passport from 'passport';
 import googleAuth from 'passport-google-oauth20';
-import {CLIENT_ID, CLIENT_SECRET} from './keys/google';
+// import {CLIENT_ID, CLIENT_SECRET} from './keys/google';
 import expressSession from 'express-session'
 
 import mongoose from 'mongoose';
