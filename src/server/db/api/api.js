@@ -1,9 +1,12 @@
-import User from './../models/user'
+import User from './../models/user';
+import fs from 'fs';
+
 
 class Api {
 
 
   static async getOrCreateUser(id, name) {
+
     
     let user = null;
     let error = null;
