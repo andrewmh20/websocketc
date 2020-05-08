@@ -18,14 +18,14 @@ import User from './db/models/user'
 
 const server = express();
 
-if (process.env.NODE_ENV === 'production') {
-  server.use((req, res, next) => {
-    if (req.header('x-forwarded-proto') !== 'https')
-      res.redirect(`https://${req.header('host')}${req.url}`)
-    else
-      next()
-  })
-}
+// if (process.env.NODE_ENV === 'production') {
+//   server.use((req, res, next) => {
+//     if (req.header('x-forwarded-proto') !== 'https')
+//       res.redirect(`https://${req.header('host')}${req.url}`)
+//     else
+//       next()
+//   })
+// }
 
 
 // Use the EJS rendering engine for HTML located in /views
