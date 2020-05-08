@@ -65,7 +65,7 @@ passport.deserializeUser(function(user, done) {
 passport.use(new googleAuth.Strategy({
   clientID: process.env.CLIENT_ID || CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET || CLIENT_SECRET,
-  callbackURL: 'http://www.websocketc.com/auth/google/callback'
+  callbackURL: 'http://websocketc.com/auth/google/callback'
 },
 async function(accessToken, refreshToken, profile, done) {
   try {
